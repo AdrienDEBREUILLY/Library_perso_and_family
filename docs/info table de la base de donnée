@@ -1,0 +1,28 @@
+Table : 
+
+users
+book
+book_liste
+book_list_book
+serie
+book_serie
+serie_part
+borrowed_book
+
+
+
+Users : cette table stocke les informations des utilisateurs du système, y compris leur nom, adresse e-mail, mot de passe haché, rôle (utilisateur ou administrateur) et date de création. Chaque utilisateur a un ID unique pour identifier leur compte.
+
+Book : cette table stocke les informations sur les livres, y compris leur titre, leur auteur, leur ISBN, leur éditeur, leur date de publication et leur résumé. Chaque livre a un ID unique pour identifier sa fiche.
+
+Book_list : cette table stocke les informations sur les listes de livres créées par les utilisateurs. Chaque liste a un nom unique et est associée à un utilisateur créateur.
+
+Book_list_book : cette table associe les listes de livres avec les livres qu'elles contiennent. Elle stocke les informations sur la relation entre un livre et une liste, telles que la date d'ajout et l'état de lecture.
+
+Serie : cette table stocke les informations sur les séries de livres, y compris leur nom, leur description et leur état (en cours, terminé, etc.). Chaque série a un ID unique pour identifier sa fiche.
+
+Book_serie : cette table associe les livres à leur série respective. Elle stocke les informations sur la relation entre un livre et une série, telles que le numéro de tome et la date d'ajout à la série.
+
+Serie_part : cette table stocke les informations sur les parties d'une série (par exemple, une trilogie). Elle stocke des informations telles que le nom de la partie, la date de sortie et le nombre de tomes qu'elle contient.
+
+Borrowed_book : cette table stocke les informations sur les livres empruntés par les utilisateurs, y compris le livre emprunté, l'utilisateur qui l'a emprunté, la date d'emprunt et la date de retour prévue. Elle permet également de suivre les livres en attente de retour.

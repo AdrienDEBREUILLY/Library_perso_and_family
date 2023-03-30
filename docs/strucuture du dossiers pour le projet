@@ -1,0 +1,61 @@
+bibliotheque_personnelle/
+    app/
+        __init__.py
+        config.py
+        models.py
+        routes.py
+        templates/
+            base.html
+            index.html
+            livre_detail.html
+            livre_liste.html
+            login.html
+            register.html
+        static/
+            css/
+                style.css
+            js/
+                script.js
+    tests/
+        __init__.py
+        test_routes.py
+        test_models.py
+    requirements.txt
+    run.py
+    build.sh
+
+app/__init__.py: Initialise l'application Flask et configure les extensions Flask et les paramètres de l'application.
+
+app/config.py: Définit la configuration de l'application Flask. Dans ce fichier, vous pouvez spécifier la configuration de base de données, les paramètres de sécurité et d'autres paramètres de l'application.
+
+app/models.py: Définit les modèles de données utilisés par l'application. Dans ce fichier, vous pouvez définir les classes pour les livres, les utilisateurs et autres objets que vous devez stocker dans la base de données.
+
+app/routes.py: Définit les routes pour l'application Flask. Dans ce fichier, vous pouvez définir les différentes URL auxquelles les utilisateurs peuvent accéder et les fonctions qui sont appelées pour gérer chaque URL.
+
+app/templates/base.html: Le modèle de base HTML pour les autres modèles. Il inclut les en-têtes, les pieds de page et les éléments communs à toutes les pages.
+
+app/templates/index.html: La page d'accueil de l'application.
+
+app/templates/livre_detail.html: La page de détails pour chaque livre.
+
+app/templates/livre_liste.html: La page de liste de tous les livres.
+
+app/templates/login.html: La page de connexion pour les utilisateurs.
+
+app/templates/register.html: La page d'inscription pour les nouveaux utilisateurs.
+
+app/static/css/style.css: Le fichier de style pour les pages HTML.
+
+app/static/js/script.js: Le script JavaScript pour les pages HTML.
+
+tests/__init__.py: Initialise les tests unitaires.
+
+tests/test_routes.py: Les tests unitaires pour les routes de l'application.
+
+tests/test_models.py: Les tests unitaires pour les modèles de l'application.
+
+requirements.txt: Les dépendances Python pour l'application.
+
+run.py: Le script pour exécuter l'application Flask.
+
+build.sh: Le script pour construire l'application, en installant les dépendances et en configurant l'environnement de l'application.
