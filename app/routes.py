@@ -1,140 +1,130 @@
-from flask import render_template, url_for, flash, redirect, request, abort
-from flask_login import login_user, current_user, logout_user, login_required
+from flask import Blueprint, render_template, url_for, flash, redirect, request, abort
 from app import db, bcrypt
-from app.models import User, Book, BookList, BookListBook, Serie, BookSerie, BorrowedBook
-from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, BookForm, BookListForm, SerieForm, BorrowBookForm
-from app.main import main
+from app.forms import LoginForm, RegistrationForm, AddBookForm, UpdateBookForm
+from app.models import User, Book
+from flask_login import login_user, current_user, logout_user, login_required
+
+routes = Blueprint('routes', __name__)
 
 
-@main.route('/')
-@main.route('/home')
-def home():
-    books = Book.query.all()
-    return render_template('index.html', books=books)
-
-
-@main.route('/book/<string:title>', methods=['GET', 'POST'])
-def book_detail(title):
-    book = Book.query.get_or_404(title)
-    return render_template('book_detail.html', title=book.title, book=book)
-
-
-@main.route('/book/new', methods=['GET', 'POST'])
-@login_required
-def add_book():
-    form = BookForm()
-    if form.validate_on_submit():
-        book = Book(title=form.title.data, author=form.author.data, publisher=form.publisher.data,
-                    publication_date=form.publication_date.data, synopsis=form.synopsis.data,
-                    language=form.language.data, cover_url=form.cover_url.data)
-        db.session.add(book)
-        db.session.commit()
-        flash('Your book has been added!', 'success')
-        return redirect(url_for('main.home'))
-    return render_template('create_book.html', title='New Book', form=form, legend='New Book')
-
-
-@main.route('/book/<string:title>/update', methods=['GET', 'POST'])
-@login_required
-def update_book(title):
-    book = Book.query.get_or_404(title)
-    form = BookForm()
-    if form.validate_on_submit():
-        book.title = form.title.data
-        book.author = form.author.data
-        book.publisher = form.publisher.data
-        book.publication_date = form.publication_date.data
-        book.synopsis = form.synopsis.data
-        book.language = form.language.data
-        book.cover_url = form.cover_url.data
-        db.session.commit()
-        flash('Your book has been updated!', 'success')
-        return redirect(url_for('main.book_detail', title=book.title))
-    elif request.method == 'GET':
-        form.title.data = book.title
-        form.author.data = book.author
-        form.publisher.data = book.publisher
-        form.publication_date.data = book.publication_date
-        form.synopsis.data = book.synopsis
-        form.language.data = book.language
-        form.cover_url.data = book.cover_url
-    return render_template('create_book.html', title='Update Book', form=form, legend='Update Book')
-
-
-@main.route('/book/<string:title>/delete', methods=['POST'])
-@login_required
-def delete_book(title):
-    book = Book.query.get_or_404(title)
-    db.session.delete(book)
-    db.session.commit()
-    flash('Your book has been deleted!', 'success')
-    return redirect(url_for('main.home'))
-
-
-@main.route('/login', methods=['GET', 'POST'])
+# User-related routes
+@routes.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            if next_page:
-                return redirect(next_page)
-            else:
-                return redirect(url_for('main.home'))
+            return redirect(next_page) if next_page else redirect(url_for('index'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 
-@main.route('/register', methods=['GET', 'POST'])
+@routes.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash('Your account has been created! You are now able to log in', 'success')
-        return redirect(url_for('main.login'))
+        flash('Your account has been created! You can now log in', 'success')
+        return redirect(url_for('routes.login'))
     return render_template('register.html', title='Register', form=form)
 
 
-@main.route('/logout')
+@routes.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('main.home'))
+    return redirect(url_for('index'))
 
 
-@main.route('/account', methods=['GET', 'POST'])
+# Book-related routes
+@routes.route('/')
+@routes.route('/index')
 @login_required
-def account():
-    form = UpdateAccountForm()
+def index():
+    books = Book.query.all()
+    return render_template('index.html', books=books)
+
+
+@routes.route('/livre_liste')
+@login_required
+def book_list():
+    books = Book.query.all()
+    return render_template('book_list.html', books=books)
+
+
+@routes.route('/livre_detail/<int:book_id>')
+@login_required
+def book_detail(book_id):
+    book = Book.query.get_or_404(book_id)
+    return render_template('book_detail.html', book=book)
+
+
+# Add, update, and delete book routes from previous response
+@routes.route('/livre_ajouter', methods=['GET', 'POST'])
+@login_required
+def book_add():
+    form = AddBookForm()
     if form.validate_on_submit():
-        current_user.username = form.username.data
-        current_user.email = form.email.data
+        book = Book(title=form.title.data, author=form.author.data, user_id=current_user.id)
+        db.session.add(book)
         db.session.commit()
-        flash('Your account has been updated!', 'success')
-        return redirect(url_for('main.account'))
+        flash('Votre livre a été ajouté avec succès!', 'success')
+        return redirect(url_for('index'))
+    return render_template('livre_ajouter.html', title='Ajouter un livre', form=form)
+
+
+@routes.route('/livre_modifier/<int:book_id>', methods=['GET', 'POST'])
+@login_required
+def book_update(book_id):
+    book = Book.query.get_or_404(book_id)
+    if book.user_id != current_user.id:
+        abort(403)
+    form = UpdateBookForm()
+    if form.validate_on_submit():
+        book.title = form.title.data
+        book.author = form.author.data
+        db.session.commit()
+        flash('Votre livre a été mis à jour avec succès!', 'success')
+        return redirect(url_for('livre_detail', book_id=book.id))
     elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.email.data = current_user.email
-    return render_template('account.html', title='Account', form=form)
+        form.title.data = book.title
+        form.author.data = book.author
+    return render_template('livre_modifier.html', title='Modifier un livre', form=form)
 
 
-@main.route('/booklist', methods=['GET', 'POST'])
+@routes.route('/livre_supprimer/<int:book_id>', methods=['POST'])
 @login_required
-def booklist():
-    form = BookListForm()
-    if form.validate_on_submit():
-        booklist = BookList(name=form.name.data, user_id=current_user.id)
-        db.session.add(booklist)
-        db.session.commit()
-        flash('Your book list has been created!', 'success')
-        return redirect(url_for('main.home'))
-    return render_template('booklist.html', title='Book List', form=form)
+def book_delete(book_id):
+    book = Book.query.get_or_404(book_id)
+    if book.user_id != current_user.id:
+        abort(403)
+    db.session.delete(book)
+    db.session.commit()
+    flash('Votre livre a été supprimé avec succès!', 'success')
+    return redirect(url_for('index'))
+
+
+# Error handlers
+@routes.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+
+@routes.errorhandler(403)
+def forbidden_error(error):
+    return render_template('403.html'), 403
+
+
+@routes.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500

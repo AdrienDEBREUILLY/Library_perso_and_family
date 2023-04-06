@@ -1,16 +1,13 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-  <h1>Register</h1>
-  <form>
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email">
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password">
-    <label for="confirm_password">Confirm Password:</label>
-    <input type="password" id="confirm_password" name="confirm_password">
-    <input type="submit" value="Register">
-  </form>
+    <h1>Inscription</h1>
+    <form action="{{ url_for('routes.register') }}" method="post">
+        {{ form.hidden_tag() }}
+        <div>{{ form.username.label }}: {{ form.username }}</div>
+        <div>{{ form.email.label }}: {{ form.email }}</div>
+        <div>{{ form.password.label }}: {{ form.password }}</div>
+        <div>{{ form.password2.label }}: {{ form.password2 }}</div>
+        <input type="submit" value="S'inscrire">
+    </form>
 {% endblock %}

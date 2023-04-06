@@ -61,6 +61,16 @@ END;
 //
 DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER set_book_added_date
+BEFORE INSERT ON book_list_book
+FOR EACH ROW
+BEGIN
+  SET NEW.book_added_date = CURRENT_DATE;
+END;
+//
+DELIMITER ;
+
 -- Table book_list
 CREATE TABLE IF NOT EXISTS book_list (
   id_book_list INT AUTO_INCREMENT NOT NULL,

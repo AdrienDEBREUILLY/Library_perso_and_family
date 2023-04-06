@@ -6,9 +6,11 @@ bibliotheque_personnelle/
         routes.py
         templates/
             base.html
+            book_add.html
+            book_detail.html
+            book_list.html
+            book_update.html
             index.html
-            livre_detail.html
-            livre_liste.html
             login.html
             register.html
         static/
