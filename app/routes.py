@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, url_for, flash, redirect, request, abort
+from flask_login import login_user, current_user, logout_user, login_required
 from app import db, bcrypt
 from app.forms import LoginForm, RegistrationForm, AddBookForm, UpdateBookForm
 from app.models import User, Book
-from flask_login import login_user, current_user, logout_user, login_required
 
 routes = Blueprint('routes', __name__)
 
@@ -15,7 +15,9 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
+        print("User found:", user)  # Debugging statement
         if user and bcrypt.check_password_hash(user.password, form.password.data):
+            print("Password matches")  # Debugging statement
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('index'))
@@ -50,6 +52,7 @@ def logout():
 @routes.route('/index')
 @login_required
 def index():
+    print("Authenticated:", current_user.is_authenticated)
     books = Book.query.all()
     return render_template('index.html', books=books)
 

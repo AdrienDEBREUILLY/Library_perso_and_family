@@ -12,6 +12,7 @@ bibliotheque_personnelle/
             book_update.html
             index.html
             login.html
+            nav.html
             register.html
         static/
             css/
