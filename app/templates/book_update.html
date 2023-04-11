@@ -2,10 +2,10 @@
 
 {% block content %}
     <h1>Modifier {{ book.title }}</h1>
-    <form action="{{ url_for('livre_modifier', book_id=book.id) }}" method="post">
+    <form action="{{ url_for('routes.livre_modifier', book_id=book.id_book) }}" method="post">
         {{ form.hidden_tag() }}
         <div>{{ form.title.label }}: {{ form.title }}</div>
         <div>{{ form.author.label }}: {{ form.author }}</div>
-        <input type="submit" value="Modifier">
+        <input type="submit" value="Mettre à jour">
     </form>
 {% endblock %}

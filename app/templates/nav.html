@@ -7,9 +7,9 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 {% if current_user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('livre_liste') }}">Liste des livres</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('livre_ajouter') }}">Ajouter un livre</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Déconnexion</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.livre_liste') }}">Liste des livres</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.livre_ajouter') }}">Ajouter un livre</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.logout') }}">Déconnexion</a></li>
                 {% else %}
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.login') }}">Connexion</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.register') }}">Inscription</a></li>

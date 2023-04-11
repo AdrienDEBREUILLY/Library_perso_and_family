@@ -5,30 +5,42 @@ from app.models import Users
 
 
 class TestTemplates(unittest.TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
+        cls.app_context = app.app_context()
+        cls.app_context.push()
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://adrien:adrien@localhost/test_db'
-        self.app_context = app.app_context()
-        self.app_context.push()
-        self.client = app.test_client()
-        self.create_test_user()
-        self.client.post('/login', data=dict(username='testuser', password='testpassword'), follow_redirects=True)
+        cls.client = app.test_client()
         db.create_all()
+        cls.create_test_user()
+        cls.client.post('/login', data=dict(username='testuser', password='testpassword'), follow_redirects=True)
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(cls):
         db.session.remove()
         db.drop_all()
-        self.app_context.pop()
+        cls.app_context.pop()
 
-    def render(self, template, **context):
-        with app.test_request_context():
-            return render_template_string(template, **context)
-
-    def create_test_user(self):
+    @classmethod
+    def create_test_user(cls):
         user = Users(username='testuser', email='test@example.com')
         user.set_password('testpassword')
         db.session.add(user)
         db.session.commit()
+
+    def setUp(self):
+        self.transaction = db.session.begin_nested()
+
+    def login(self):
+        self.client.post('/login', data=dict(username='testuser', password='testpassword'), follow_redirects=True)
+
+    def tearDown(self):
+        self.transaction.rollback()
+
+    def render(self, template, **context):
+        with app.test_request_context():
+            return render_template_string(template, **context)
 
     def test_base_template(self):
         template = '''
