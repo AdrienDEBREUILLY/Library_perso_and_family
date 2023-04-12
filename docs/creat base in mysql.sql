@@ -5,26 +5,26 @@ USE bibliotheque_perso_and_family;
 
 -- Création des tables et insertion des données initiales
 
--- Table users
-CREATE TABLE IF NOT EXISTS users (
-  id_users INT AUTO_INCREMENT NOT NULL,
+-- Table user
+CREATE TABLE IF NOT EXISTS user (
+  id_user INT AUTO_INCREMENT NOT NULL,
   username VARCHAR(30) NOT NULL,
   password VARCHAR(512) NOT NULL,
   email VARCHAR(50) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME,
-  PRIMARY KEY (id_users),
+  PRIMARY KEY (id_user),
   UNIQUE (username, email)
 );
 
-INSERT INTO users (username, password, email) VALUES
+INSERT INTO user (username, password, email) VALUES
 ('user1', 'password1', 'user1@email.com'),
 ('user2', 'password2', 'user2@email.com');
 
 DELIMITER //
-CREATE TRIGGER update_users_updated_at
+CREATE TRIGGER update_user_updated_at
 BEFORE UPDATE
-ON users FOR EACH ROW
+ON user FOR EACH ROW
 BEGIN
   SET NEW.updated_at = NOW();
 END;
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS book_list (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME,
   PRIMARY KEY (id_book_list),
-  FOREIGN KEY (user_id) REFERENCES users(id_users),
+  FOREIGN KEY (user_id) REFERENCES user(id_user),
   UNIQUE (name, user_id)
 );
 
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS borrowed_book (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME,
   PRIMARY KEY (id_borrowed_book),
-  FOREIGN KEY (user_id) REFERENCES users(id_users),
+  FOREIGN KEY (user_id) REFERENCES user(id_user),
   FOREIGN KEY (book_id) REFERENCES book(id_book),
   UNIQUE (user_id, book_id, borrowed_date)
 );

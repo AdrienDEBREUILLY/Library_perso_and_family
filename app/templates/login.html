@@ -4,6 +4,7 @@
   <div class="container">
     <h1 class="my-4">Login</h1>
     <form action="{{ url_for('routes.login') }}" method="post" class="w-50 mx-auto">
+      {{ form.csrf_token }}
       <div class="mb-3">
         <label class="form-label"> {{ form.email.label }} </label>
         {{ form.email(class="form-control") }}

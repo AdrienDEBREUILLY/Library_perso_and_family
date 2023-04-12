@@ -1,7 +1,7 @@
 import unittest
 from flask import render_template_string
 from app import app, db
-from app.models import Users
+from app.models import User
 
 
 class TestTemplates(unittest.TestCase):
@@ -24,7 +24,7 @@ class TestTemplates(unittest.TestCase):
 
     @classmethod
     def create_test_user(cls):
-        user = Users(username='testuser', email='test@example.com')
+        user = User(username='testuser', email='test@example.com')
         user.set_password('testpassword')
         db.session.add(user)
         db.session.commit()

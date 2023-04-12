@@ -6,11 +6,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Users.query.get(int(user_id))
+    return User.query.get(int(user_id))
 
 
-class Users(db.Model, UserMixin):
-    id_users = db.Column(db.Integer, primary_key=True)
+class User(db.Model, UserMixin):
+    id_user = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), unique=True, nullable=False)
     password = db.Column(db.String(512), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
@@ -25,6 +25,9 @@ class Users(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+    def get_id(self):
+        return str(self.id_user)
 
 
 class Book(db.Model):
@@ -46,12 +49,12 @@ class Book(db.Model):
 class BookList(db.Model):
     id_book_list = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id_users'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id_user'), nullable=False)
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime)
 
-    user = db.relationship('Users', backref=db.backref('book_lists', lazy=True))
+    user = db.relationship('User', backref=db.backref('book_lists', lazy=True))
 
     def __repr__(self):
         return f"BookList('{self.name}', '{self.user_id}')"
@@ -114,7 +117,7 @@ class SeriePart(db.Model):
 
 class BorrowedBook(db.Model):
     id_borrowed_book = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id_users'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id_user'), nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id_book'), nullable=False)
     borrowed_date = db.Column(db.Date, nullable=False)
     return_date = db.Column(db.Date)
@@ -122,7 +125,7 @@ class BorrowedBook(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime)
 
-    user = db.relationship('Users', backref=db.backref('borrowed_books', lazy=True))
+    user = db.relationship('User', backref=db.backref('borrowed_books', lazy=True))
     book = db.relationship('Book', backref=db.backref('borrowed_books', lazy=True))
 
     def __repr__(self):

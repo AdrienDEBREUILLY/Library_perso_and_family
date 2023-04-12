@@ -1,6 +1,6 @@
 import unittest
 from app import app, db
-from app.models import Users, Book
+from app.models import User, Book
 from flask import url_for
 
 

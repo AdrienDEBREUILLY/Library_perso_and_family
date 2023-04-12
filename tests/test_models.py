@@ -1,6 +1,6 @@
 import unittest
 from app import app, db
-from app.models import Users, Book, BookList, BookListBook, Serie, BookSerie, SeriePart, BorrowedBook
+from app.models import User, Book, BookList, BookListBook, Serie, BookSerie, SeriePart, BorrowedBook
 from datetime import date
 
 
@@ -18,12 +18,12 @@ class TestModels(unittest.TestCase):
         self.app_context.pop()
 
     def test_user(self):
-        user = Users(username='testuser', email='test@example.com')
+        user = User(username='testuser', email='test@example.com')
         user.set_password('testpassword')
         db.session.add(user)
         db.session.commit()
 
-        found_user = Users.query.filter_by(username='testuser').first()
+        found_user = User.query.filter_by(username='testuser').first()
         self.assertIsNotNone(found_user)
         self.assertTrue(found_user.check_password('testpassword'))
 
@@ -37,18 +37,18 @@ class TestModels(unittest.TestCase):
         self.assertEqual(found_book.author, 'Test Author')
 
     def test_book_list(self):
-        user = Users(username='testuser2', email='test2@example.com')
+        user = User(username='testuser2', email='test2@example.com')
         user.set_password('testpassword2')
         db.session.add(user)
         db.session.commit()
 
-        book_list = BookList(name='Test BookList', user_id=user.id_users)
+        book_list = BookList(name='Test BookList', user_id=user.id_user)
         db.session.add(book_list)
         db.session.commit()
 
         found_book_list = BookList.query.filter_by(name='Test BookList').first()
         self.assertIsNotNone(found_book_list)
-        self.assertEqual(found_book_list.user_id, user.id_users)
+        self.assertEqual(found_book_list.user_id, user.id_user)
 
         # Test BookListBook model
     def test_book_list_book(self):
@@ -56,12 +56,12 @@ class TestModels(unittest.TestCase):
         db.session.add(book)
         db.session.commit()
 
-        user = Users(username='testuser3', email='test3@example.com')
+        user = User(username='testuser3', email='test3@example.com')
         user.set_password('testpassword3')
         db.session.add(user)
         db.session.commit()
 
-        book_list = BookList(name='Test BookList 2', user_id=user.id_users)
+        book_list = BookList(name='Test BookList 2', user_id=user.id_user)
         db.session.add(book_list)
         db.session.commit()
 
@@ -120,16 +120,16 @@ class TestModels(unittest.TestCase):
         db.session.add(book)
         db.session.commit()
 
-        user = Users(username='testuser4', email='test4@example.com')
+        user = User(username='testuser4', email='test4@example.com')
         user.set_password('testpassword4')
         db.session.add(user)
         db.session.commit()
 
-        borrowed_book = BorrowedBook(user_id=user.id_users, book_id=book.id_book, borrowed_date=date.today())
+        borrowed_book = BorrowedBook(user_id=user.id_user, book_id=book.id_book, borrowed_date=date.today())
         db.session.add(borrowed_book)
         db.session.commit()
 
-        found_borrowed_book = BorrowedBook.query.filter_by(user_id=user.id_users, book_id=book.id_book).first()
+        found_borrowed_book = BorrowedBook.query.filter_by(user_id=user.id_user, book_id=book.id_book).first()
         self.assertIsNotNone(found_borrowed_book)
         self.assertEqual(found_borrowed_book.borrowed_date, date.today())
 

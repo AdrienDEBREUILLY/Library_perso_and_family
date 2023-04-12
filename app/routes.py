@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, url_for, flash, redirect, request,
 from flask_login import login_user, current_user, logout_user, login_required
 from app import db, bcrypt
 from app.forms import LoginForm, RegistrationForm, AddBookForm, UpdateBookForm
-from app.models import Users, Book
+from app.models import User, Book
 
 routes = Blueprint('routes', __name__)
 
@@ -14,15 +14,17 @@ def login():
         return redirect(url_for('routes.index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         print("User found:", user)  # Debugging statement
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             print("Password matches")  # Debugging statement
-            login_user(user, remember=form.remember.data)
+            login_user(user, remember=form.remember_me.data)
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('routes.index'))
+            return redirect(next_page) if next_page else redirect(url_for('routes.book_list'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
+    else:
+        print("Form not validated:", form.errors)  # Debugging statement
     return render_template('login.html', title='Login', form=form)
 
 
@@ -33,7 +35,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = Users(username=form.username.data, email=form.email.data, password=hashed_password)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You can now log in', 'success')
