@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Ajouter un livre</h1>
-    <form action="{{ url_for('routes.livre_ajouter') }}" method="post">
+    <form action="{{ url_for('routes.book_add') }}" method="post">
         {{ form.hidden_tag() }}
         <div>{{ form.title.label }}: {{ form.title }}</div>
         <div>{{ form.author.label }}: {{ form.author }}</div>

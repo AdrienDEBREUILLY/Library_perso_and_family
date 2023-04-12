@@ -4,7 +4,7 @@
     <h1 class="mb-4">Liste des livres</h1>
     <div class="list-group">
         {% for book in books %}
-            <a href="{{ url_for('routes.livre_detail', book_id=book.id_book) }}" class="list-group-item list-group-item-action">{{ book.title }}</a>
+            <a href="{{ url_for('routes.book_detail', book_id=book.id_book) }}" class="list-group-item list-group-item-action">{{ book.title }}</a>
         {% endfor %}
     </div>
 {% endblock %}

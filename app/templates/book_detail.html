@@ -3,8 +3,8 @@
 {% block content %}
     <h1>{{ book.title }}</h1>
     <p>Auteur: {{ book.author }}</p>
-    <a href="{{ url_for('routes.livre_modifier', book_id=book.id_book) }}">Modifier</a>
-    <form action="{{ url_for('routes.livre_supprimer', book_id=book.id_book) }}" method="post">
+    <a href="{{ url_for('routes.book_update', book_id=book.id_book) }}">Modifier</a>
+    <form action="{{ url_for('routes.book_delete', book_id=book.id_book) }}" method="post">
         <input type="submit" value="Supprimer">
     </form>
 {% endblock %}
