@@ -91,8 +91,8 @@ def book_add():
 @login_required
 def book_update(book_id):
     book = Book.query.get_or_404(book_id)
-    # if book.user_id != current_user.id_user:
-    #     abort(403)
+    if not current_user.is_admin:
+        abort(403)
     form = UpdateBookForm()
     if form.validate_on_submit():
         book.title = form.title.data
@@ -110,8 +110,8 @@ def book_update(book_id):
 @login_required
 def book_delete(book_id):
     book = Book.query.get_or_404(book_id)
-    # if book.user_id != current_user.id_user:
-    #     abort(403)
+    if not current_user.is_admin:
+        abort(403)
     # Supprimer les entrées associées dans la table BookListBook
     book_list_books = BookListBook.query.filter_by(book_id=book.id_book).all()
     for book_list_book in book_list_books:

@@ -8,6 +8,7 @@ USE bibliotheque_perso_and_family;
 -- Table user
 CREATE TABLE IF NOT EXISTS user (
   id_user INT AUTO_INCREMENT NOT NULL,
+  is_admin BOOLEAN DEFAULT FALSE,
   username VARCHAR(30) NOT NULL,
   password VARCHAR(512) NOT NULL,
   email VARCHAR(50) NOT NULL,

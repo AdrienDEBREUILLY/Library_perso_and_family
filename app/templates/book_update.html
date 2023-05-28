@@ -6,6 +6,8 @@
         {{ form.hidden_tag() }}
         <div>{{ form.title.label }}: {{ form.title }}</div>
         <div>{{ form.author.label }}: {{ form.author }}</div>
-        <input type="submit" value="Mettre à jour">
+        {% if current_user.is_admin %}
+            <input type="submit" value="Mettre à jour">
+        {% endif %}
     </form>
 {% endblock %}
