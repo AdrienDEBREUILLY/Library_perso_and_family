@@ -18,9 +18,9 @@ CREATE TABLE IF NOT EXISTS user (
   UNIQUE (username, email)
 );
 
-INSERT INTO user (username, password, email) VALUES
-('user1', 'password1', 'user1@email.com'),
-('user2', 'password2', 'user2@email.com');
+--INSERT INTO user (username, password, email) VALUES
+--('user1', 'password1', 'user1@email.com'),
+--('user2', 'password2', 'user2@email.com');
 
 DELIMITER //
 CREATE TRIGGER update_user_updated_at
@@ -48,9 +48,9 @@ CREATE TABLE IF NOT EXISTS book (
   UNIQUE (title, author)
 );
 
-INSERT INTO book (title, author, publisher, publication_date, synopsis, language, cover_url) VALUES
-('Book 1', 'Author 1', 'Publisher 1', '2023-01-01', 'Synopsis for Book 1', 'English', 'cover1.jpg'),
-('Book 2', 'Author 2', 'Publisher 2', '2023-02-01', 'Synopsis for Book 2', 'English', 'cover2.jpg');
+--INSERT INTO book (title, author, publisher, publication_date, synopsis, language, cover_url) VALUES
+--('Book 1', 'Author 1', 'Publisher 1', '2023-01-01', 'Synopsis for Book 1', 'English', 'cover1.jpg'),
+--('Book 2', 'Author 2', 'Publisher 2', '2023-02-01', 'Synopsis for Book 2', 'English', 'cover2.jpg');
 
 DELIMITER //
 CREATE TRIGGER update_book_updated_at
@@ -85,9 +85,9 @@ CREATE TABLE IF NOT EXISTS book_list (
   UNIQUE (name, user_id)
 );
 
-INSERT INTO book_list (name, user_id, description) VALUES
-('List 1', 1, 'Description for List 1'),
-('List 2', 2, 'Description for List 2');
+--INSERT INTO book_list (name, user_id, description) VALUES
+--('List 1', 1, 'Description for List 1'),
+--('List 2', 2, 'Description for List 2');
 
 DELIMITER //
 CREATE TRIGGER update_book_list_updated_at
@@ -112,9 +112,9 @@ CREATE TABLE IF NOT EXISTS book_list_book (
   UNIQUE (book_id, book_list_id)
 );
 
-INSERT INTO book_list_book (book_id, book_list_id, book_added_date) VALUES
-(1, 1, '2023-01-15'),
-(2, 2, '2023-02-15');
+--INSERT INTO book_list_book (book_id, book_list_id, book_added_date) VALUES
+--(1, 1, '2023-01-15'),
+--(2, 2, '2023-02-15');
 
 DELIMITER //
 CREATE TRIGGER update_book_list_book_updated_at
@@ -137,9 +137,9 @@ CREATE TABLE IF NOT EXISTS serie (
   UNIQUE (name)
 );
 
-INSERT INTO serie (name, description) VALUES
-('Serie 1', 'Description for Serie 1'),
-('Serie 2', 'Description for Serie 2');
+--INSERT INTO serie (name, description) VALUES
+--('Serie 1', 'Description for Serie 1'),
+--('Serie 2', 'Description for Serie 2');
 
 DELIMITER //
 CREATE TRIGGER update_serie_updated_at
@@ -165,9 +165,9 @@ CREATE TABLE IF NOT EXISTS book_serie (
   UNIQUE (book_id, serie_id, number_in_serie)
 );
 
-INSERT INTO book_serie (book_id, serie_id, number_in_serie, notes) VALUES
-(1, 1, 1, 'Notes for Book 1 in Serie 1'),
-(2, 2, 1, 'Notes for Book 2 in Serie 2');
+--INSERT INTO book_serie (book_id, serie_id, number_in_serie, notes) VALUES
+--(1, 1, 1, 'Notes for Book 1 in Serie 1'),
+--(2, 2, 1, 'Notes for Book 2 in Serie 2');
 
 DELIMITER //
 CREATE TRIGGER update_book_serie_updated_at
@@ -193,9 +193,9 @@ CREATE TABLE IF NOT EXISTS serie_part (
   UNIQUE (serie_id, part_name, part_number)
 );
 
-INSERT INTO serie_part (serie_id, part_name, part_number, description) VALUES
-(1, 'Part 1 of Serie 1', 1, 'Description of part 1 in Serie 1'),
-(2, 'Part 1 of Serie 2', 1, 'Description of part 1 in Serie 2');
+--INSERT INTO serie_part (serie_id, part_name, part_number, description) VALUES
+--(1, 'Part 1 of Serie 1', 1, 'Description of part 1 in Serie 1'),
+--(2, 'Part 1 of Serie 2', 1, 'Description of part 1 in Serie 2');
 
 DELIMITER //
 CREATE TRIGGER update_serie_part_updated_at
@@ -223,9 +223,9 @@ CREATE TABLE IF NOT EXISTS borrowed_book (
   UNIQUE (user_id, book_id, borrowed_date)
 );
 
-INSERT INTO borrowed_book (user_id, book_id, borrowed_date, return_date, returned_date) VALUES
-(1, 1, '2023-01-01', '2023-01-15', '2023-01-10'),
-(2, 2, '2023-02-01', '2023-02-15', '2023-02-10');
+--INSERT INTO borrowed_book (user_id, book_id, borrowed_date, return_date, returned_date) VALUES
+--(1, 1, '2023-01-01', '2023-01-15', '2023-01-10'),
+--(2, 2, '2023-02-01', '2023-02-15', '2023-02-10');
 
 DELIMITER //
 CREATE TRIGGER update_borrowed_book_updated_at

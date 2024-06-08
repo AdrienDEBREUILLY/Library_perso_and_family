@@ -2,6 +2,7 @@ bibliotheque_perso_and_family/
     app/
         __init__.py
         config.py
+        forms.py
         models.py
         routes.py
         templates/

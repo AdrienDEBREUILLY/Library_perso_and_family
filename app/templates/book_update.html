@@ -5,7 +5,29 @@
     <form action="{{ url_for('routes.book_update', book_id=book.id_book) }}" method="post">
         {{ form.hidden_tag() }}
         <div>{{ form.title.label }}: {{ form.title }}</div>
+        {% for error in form.title.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
         <div>{{ form.author.label }}: {{ form.author }}</div>
+        {% for error in form.author.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <div>{{ form.publisher.label }}: {{ form.publisher }}</div>
+        {% for error in form.publisher.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <div>{{ form.publication_date.label }}: {{ form.publication_date }}</div>
+        {% for error in form.publication_date.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <div>{{ form.synopsis.label }}: {{ form.synopsis }}</div>
+        {% for error in form.synopsis.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <div>{{ form.language.label }}: {{ form.language }}</div>
+        {% for error in form.language.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
         {% if current_user.is_admin %}
             <input type="submit" value="Mettre à jour">
         {% endif %}

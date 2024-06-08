@@ -79,11 +79,23 @@ def book_detail(book_id):
 def book_add():
     form = AddBookForm()
     if form.validate_on_submit():
-        book = Book(title=form.title.data, author=form.author.data)
-        db.session.add(book)
-        db.session.commit()
-        flash('Votre livre a été ajouté avec succès!', 'success')
-        return redirect(url_for('routes.index'))
+        try:
+            book = Book(
+                title=form.title.data,
+                author=form.author.data,
+                publisher=form.publisher.data,
+                publication_date=form.publication_date.data,
+                synopsis=form.synopsis.data,
+                language=form.language.data
+            )
+            db.session.add(book)
+            db.session.commit()
+            flash('Votre livre a été ajouté avec succès!', 'success')
+            return redirect(url_for('routes.index'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error adding book: {str(e)}', 'danger')
+            print(f'Error: {str(e)}')
     return render_template('book_add.html', title='Ajouter un livre', form=form)
 
 
@@ -95,14 +107,27 @@ def book_update(book_id):
         abort(403)
     form = UpdateBookForm()
     if form.validate_on_submit():
-        book.title = form.title.data
-        book.author = form.author.data
-        db.session.commit()
-        flash('Votre livre a été mis à jour avec succès!', 'success')
-        return redirect(url_for('routes.book_detail', book_id=book.id_book))
+        try:
+            book.title = form.title.data
+            book.author = form.author.data
+            book.publisher = form.publisher.data
+            book.publication_date = form.publication_date.data
+            book.synopsis = form.synopsis.data
+            book.language = form.language.data
+            db.session.commit()
+            flash('Votre livre a été mis à jour avec succès!', 'success')
+            return redirect(url_for('routes.book_detail', book_id=book.id_book))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error updating book: {str(e)}', 'danger')
+            print(f'Error: {str(e)}')
     elif request.method == 'GET':
         form.title.data = book.title
         form.author.data = book.author
+        form.publisher.data = book.publisher
+        form.publication_date.data = book.publication_date
+        form.synopsis.data = book.synopsis
+        form.language.data = book.language
     return render_template('book_update.html', title='Modifier un livre', form=form, book=book)
 
 

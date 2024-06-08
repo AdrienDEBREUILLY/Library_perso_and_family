@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, DateField, TextAreaField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import User
 
@@ -34,10 +34,18 @@ class RegistrationForm(FlaskForm):
 class AddBookForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     author = StringField('Author', validators=[DataRequired()])
+    publisher = StringField('Publisher', validators=[DataRequired()])
+    publication_date = DateField('Publication Date', format='%Y-%m-%d', validators=[DataRequired()])
+    synopsis = TextAreaField('Synopsis', validators=[DataRequired()])
+    language = StringField('Language', validators=[DataRequired()])
     submit = SubmitField('Add Book')
 
 
 class UpdateBookForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     author = StringField('Author', validators=[DataRequired()])
+    publisher = StringField('Publisher', validators=[DataRequired()])
+    publication_date = DateField('Publication Date', format='%Y-%m-%d', validators=[DataRequired()])
+    synopsis = TextAreaField('Synopsis', validators=[DataRequired()])
+    language = StringField('Language', validators=[DataRequired()])
     submit = SubmitField('Update Book')
